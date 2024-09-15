@@ -1,7 +1,8 @@
-import { useRef } from 'react';
-import ChildSection from '../ChildSection';
-import { ChildSectionRef } from '../ChildSection/ChildSection';
+import { useRef, useState } from 'react';
+import FirstChildSection from '../FirstChildSection';
+import { ChildSectionRef } from '../FirstChildSection/FirstChildSection';
 import Section from '../../components/Section';
+import SecondChildSection from '../SecondChildSection';
 
 function ParentSection() {
   const title: string = 'Parent Section';
@@ -23,6 +24,14 @@ function ParentSection() {
     }
   };
 
+  // Lifting States
+  const [dataFromChild, setDataFromChild] = useState('');
+
+  // Function to handle data passed from child
+  const handleChildData = (data: string) => {
+    setDataFromChild(data);
+  };
+
   return (
     <Section title={title}>
       {/* Single Page Ref */}
@@ -31,8 +40,15 @@ function ParentSection() {
 
       {/*Forward Ref */}
       <h4>Forward Ref</h4>
-      <ChildSection ref={childRef} description='ref description' />
+      <FirstChildSection
+        ref={childRef}
+        description='ref description'
+        sendDataToParent={handleChildData}
+        data={dataFromChild}
+      />
       <button onClick={handleFocus}>Focus on Input</button>
+
+      <SecondChildSection dataFromFirstChild={dataFromChild} />
     </Section>
   );
 }
